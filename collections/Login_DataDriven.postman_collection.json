@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "57ad49a2-f0e7-464e-9eaa-b0183052278a",
+		"name": "Automatizacion Login DataDriven",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9571549"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "1-Login Data Driven",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const escenario = pm.iterationData.get(\"escenario\");\r",
+									"const expectedStatus = Number(pm.iterationData.get(\"expected_status\"));\r",
+									"\r",
+									"pm.test(`Login – Escenario: ${escenario}`, function () {\r",
+									"    pm.expect(pm.response.code).to.eql(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Validar JSON SOLO si el response es JSON\r",
+									"pm.test(`Login – Validar formato de respuesta (${escenario})`, function () {\r",
+									"    const contentType = pm.response.headers.get(\"Content-Type\");\r",
+									"\r",
+									"    if (contentType && contentType.includes(\"application/json\")) {\r",
+									"        const json = pm.response.json();\r",
+									"        pm.expect(json).to.be.an(\"object\");\r",
+									"    } else {\r",
+									"        pm.expect(contentType, \"Respuesta no es JSON (bloqueo esperado)\")\r",
+									"            .to.include(\"text/html\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

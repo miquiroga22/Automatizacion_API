@@ -1,0 +1,4 @@
+escenario,email,password,expected_status
+Password faltante,peter@klaven,,403
+Credenciales invalidas,wrong@mail.com,123456,403
+Login exitoso,eve.holt@reqres.in,cityslicka,403
