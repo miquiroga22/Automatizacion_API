@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install Newman
-        run: npm install -g newman
+        run: npm install -g newman newman-reporter-htmlextra
 
       - name: Debug workspace
         run: |
@@ -28,9 +28,17 @@ jobs:
           ls -R
 
       - name: Run Newman Login Data Driven Tests
-        working-directory: ${{ github.workspace }}
         run: |
+          mkdir -p reports
           newman run collections/Login_DataDriven.postman_collection.json \
             -e environments/DEV.postman_environment.json \
-            -d data/login_data.csv
+            -d data/login_data.csv \
+            -r htmlextra \
+            --reporter-htmlextra-export reports/login_report.html
+
+      - name: Upload Newman HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-login-api
+          path: reports/login_report.html
 
